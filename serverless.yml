@@ -6,13 +6,21 @@ custom:
 
 plugins:
   - serverless-export-env
+  - serverless-pseudo-parameters
 
 provider:
   name: aws
   runtime: nodejs12.x
 
+  iamRoleStatements:
+    - Effect: Allow
+      Action: dynamodb:scan
+      Resource: !GetAtt RestaurantsTable.Arn
+
 functions:
   get-index:
+    environment:
+      restaurants_api: https://#{ApiGatewayRestApi}.execute-api.#{AWS::Region}.amazonaws.com/${self:provider.stage}/restaurants
     handler: functions/get-index.handler
     events:
       - http:
