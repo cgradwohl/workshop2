@@ -16,6 +16,10 @@ provider:
     - Effect: Allow
       Action: dynamodb:scan
       Resource: !GetAtt RestaurantsTable.Arn
+      # NOTE:#1 here we configure a valid IAM POLICY for this IAM EXECUTION __ROLE__
+    - Effect: Allow
+      Action: execute-api:Invoke
+      Resource: arn:aws:execute-api:#{AWS::Region}:#{AWS::AccountId}:#{ApiGatewayRestApi}/${self:provider.stage}/GET/restaurants
 
 functions:
   get-index:
@@ -32,6 +36,8 @@ functions:
       - http:
           path: /restaurants
           method: get
+          # NOTE:#1 here we are saying that we require a valid IAM POLICY to execute this endpoint
+          authorizer: aws_iam
     environment:
       restaurants_table: !Ref RestaurantsTable
 
