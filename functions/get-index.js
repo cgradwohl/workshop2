@@ -12,17 +12,18 @@ const template = fs.readFileSync('static/index.html', 'utf-8')
 const getRestaurants = async () => {
   console.log(`loading restaurants from ${restaurantsApiRoot}...`)
   const url = URL.parse(restaurantsApiRoot) // restaurantsApiRoot --> https://#{ApiGatewayRestApi}.execute-api.#{AWS::Region}.amazonaws.com/${self:provider.stage}/restaurants
+  
   const opts = {
     host: url.hostname,
     path: url.pathname
   }
 
-  // sign the request to get past the aws_iam authorizer
+  // provide the IAM Users acess keys by signing the request to get past the aws_iam authorizer
+  // NOTE:#1 aws4 library grabs the execution role credentials from environment variables, and sign the request.
   aws4.sign(opts)
 
   // NOTE:#1
   // HERE WE ARE MAKING A REQUEST TO A LAMBDA FROM THIS LAMBDA
-  // this is an example of making a request to a private/ internal API that requires an IAM POLICY to pass the aws_iam authorizer
   const httpReq = http.get(restaurantsApiRoot, {
     headers: opts.headers
   })

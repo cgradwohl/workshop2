@@ -16,7 +16,9 @@ provider:
     - Effect: Allow
       Action: dynamodb:scan
       Resource: !GetAtt RestaurantsTable.Arn
-      # NOTE:#1 here we configure a valid IAM POLICY for this IAM EXECUTION __ROLE__
+      # NOTE:#1 here we configure an IAM POLICY which grants the user permission to call any GET method along the /srestaurants path
+      # NOTE:#1 later, we use this lambda execution role to retrieve credentials from environment variables (AWS_SESSION_TOKEN, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY).
+      # NOTE:#1 Finally, once we have the credentials from this lambda execution role, we use them to sign the request to the protected resource.
     - Effect: Allow
       Action: execute-api:Invoke
       Resource: arn:aws:execute-api:#{AWS::Region}:#{AWS::AccountId}:#{ApiGatewayRestApi}/${self:provider.stage}/GET/restaurants
@@ -36,8 +38,9 @@ functions:
       - http:
           path: /restaurants
           method: get
-          # NOTE:#1 here we are saying that we require a valid IAM POLICY to execute this endpoint
-          authorizer: aws_iam
+          # NOTE:#1 here we enabling an aws_iam authorizer function, which requires the users IAM access keys to sign the request
+          authorizer:
+            type: aws_iam
     environment:
       restaurants_table: !Ref RestaurantsTable
 
