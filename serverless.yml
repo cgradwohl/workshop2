@@ -26,6 +26,8 @@ functions:
   get-index:
     environment:
       restaurants_api: https://#{ApiGatewayRestApi}.execute-api.#{AWS::Region}.amazonaws.com/${self:provider.stage}/restaurants
+      cognito_user_pool_id: !Ref CognitoUserPool
+      cognito_client_id: !Ref WebCognitoUserPoolClient
     handler: functions/get-index.handler
     events:
       - http:
