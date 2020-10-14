@@ -46,7 +46,6 @@ functions:
 
 resources:
   Resources:
-
     RestaurantsTable:
       Type: AWS::DynamoDB::Table
       Properties:
