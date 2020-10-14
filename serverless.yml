@@ -56,7 +56,6 @@ resources:
         KeySchema:
           - AttributeName: name
             KeyType: HASH
-
     CognitoUserPool:
       Type: AWS::Cognito::UserPool
       Properties:
