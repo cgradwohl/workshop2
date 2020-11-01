@@ -21,6 +21,7 @@ const findRestaurantsByTheme = async (theme, count) => {
 }
 
 module.exports.handler = async (event) => {
+  // NOTE we need to parse the stringified body
   const req = JSON.parse(event.body)
   const theme = req.theme
   const restaurants = await findRestaurantsByTheme(theme, defaultResults)
