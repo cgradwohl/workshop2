@@ -2,7 +2,6 @@ const { init } = require('../steps/init')
 const when = require('../steps/when')
 const tearDown = require('../steps/tearDown')
 const given = require('../steps/given')
-console.log = jest.fn()
 
 describe('Given an authenticated user', () => {
   let user
