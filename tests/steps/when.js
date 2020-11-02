@@ -83,9 +83,9 @@ const viaHttp = async (relPath, method, opts) => {
 
 const we_invoke_get_index = async () => {
   switch (mode) {
-    case 'handler': // integration
+    case 'integration': // integration
       return await viaHandler({}, 'get-index')
-    case 'http': // e2e or acceptence
+    case 'e2e': // e2e or acceptence
       return await viaHttp('', 'GET')
     default:
       throw new Error(`unsupported mode: ${mode}`)
@@ -94,9 +94,9 @@ const we_invoke_get_index = async () => {
 
 const we_invoke_get_restaurants = async () => {
   switch (mode) {
-    case 'handler':
+    case 'integration':
       return await viaHandler({}, 'get-restaurants')
-    case 'http':
+    case 'e2e':
       return await viaHttp('restaurants', 'GET', { iam_auth: true })
     default:
       throw new Error(`unsupported mode: ${mode}`)
@@ -107,9 +107,9 @@ const we_invoke_search_restaurants = async (theme, user) => {
   const body = JSON.stringify({ theme })
 
   switch (mode) {
-    case 'handler':
+    case 'integration':
       return await viaHandler({ body }, 'search-restaurants')
-    case 'http':
+    case 'e2e':
       const auth = user.idToken
       return await viaHttp('restaurants/search', 'POST', { body, auth })
     default:
