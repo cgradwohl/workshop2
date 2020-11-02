@@ -140,3 +140,11 @@ resources:
       Value: !Ref WebCognitoUserPoolClient
     CognitoUserPoolServerClientId:
       Value: !Ref ServerCognitoUserPoolClient
+    # adds RestApiUrl output to the CloudFormation stack
+    RestApiUrl:
+      Value: 
+        Fn::Join:
+          - ""
+          - - https://
+            - !Ref ApiGatewayRestApi
+            - .execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}
