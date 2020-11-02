@@ -137,6 +137,19 @@ resources:
           - ALLOW_ADMIN_USER_PASSWORD_AUTH
           - ALLOW_REFRESH_TOKEN_AUTH
         PreventUserExistenceErrors: ENABLED
+    # adds a parameter to the store for the deployed service URL
+    ServiceUrlParameter:
+      Type: AWS::SSM::Parameter
+      Properties:
+        Type: String
+        Name: /${self:service}/${self:provider.stage}/serviceUrl
+        Value:
+          Fn::Join:
+            - ""
+            - - https://
+              - !Ref ApiGatewayRestApi
+              - .execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}
+
   Outputs:
     RestaurantsTableName:
       Value: !Ref RestaurantsTable
@@ -156,15 +169,3 @@ resources:
           - - https://
             - !Ref ApiGatewayRestApi
             - .execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}
-    # adds a parameter to the store for the deployed service URL
-    ServiceUrlParameter:
-      Type: AWS::SSM::Parameter
-      Properties:
-        Type: String
-        Name: /${self:service}/${self:provider.stage}/serviceUrl
-        Value:
-          Fn::Join:
-            - ""
-            - - https://
-              - !Ref ApiGatewayRestApi
-              - .execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}
